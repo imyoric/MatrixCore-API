@@ -2638,6 +2638,15 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
     @Nullable
     StructureSearchResult locateNearestStructure(@NotNull Location origin, @NotNull Structure structure, int radius, boolean findUnexplored);
 
+    // Spigot start
+    public class Spigot {
+
+    }
+
+    @NotNull
+    Spigot spigot();
+    // Spigot end
+
     /**
      * Finds the nearest raid close to the given location.
      *
