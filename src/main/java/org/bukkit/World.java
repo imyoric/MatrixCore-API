@@ -2639,6 +2639,22 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
     StructureSearchResult locateNearestStructure(@NotNull Location origin, @NotNull Structure structure, int radius, boolean findUnexplored);
 
     // Spigot start
+    /**
+     * Returns the view distance used for this world.
+     *
+     * @return the view distance used for this world
+     */
+    int getViewDistance();
+
+    /**
+     * Returns the simulation distance used for this world.
+     *
+     * @return the simulation distance used for this world
+     */
+    int getSimulationDistance();
+    // Spigot end
+
+    // Spigot start
     public class Spigot {
 
         /**
