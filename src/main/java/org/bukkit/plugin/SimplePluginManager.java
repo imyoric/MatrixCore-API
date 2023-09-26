@@ -24,6 +24,8 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -560,50 +562,59 @@ public final class SimplePluginManager implements PluginManager {
      */
     @Override
     public void callEvent(@NotNull Event event) {
-        if (event.isAsynchronous()) {
-            if (Thread.holdsLock(this)) {
-                throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from inside synchronized code.");
-            }
-            if (server.isPrimaryThread()) {
-                throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from primary server thread.");
-            }
-        } else {
-            if (!server.isPrimaryThread()) {
-                throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from another thread.");
-            }
-        }
+//        if (event.isAsynchronous()) {
+//            if (Thread.holdsLock(this)) {
+//                throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from inside synchronized code.");
+//            }
+//            if (server.isPrimaryThread()) {
+//                throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from primary server thread.");
+//            }
+//        } else {
+//            if (!server.isPrimaryThread()) {
+//                throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from another thread.");
+//            }
+//        }
 
         fireEvent(event);
     }
 
     private void fireEvent(@NotNull Event event) {
-        HandlerList handlers = event.getHandlers();
-        RegisteredListener[] listeners = handlers.getRegisteredListeners();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HandlerList handlers = event.getHandlers();
+                RegisteredListener[] listeners = handlers.getRegisteredListeners();
 
-        for (RegisteredListener registration : listeners) {
-            if (!registration.getPlugin().isEnabled()) {
-                continue;
-            }
+                for (RegisteredListener registration : listeners) {
+                    if (!registration.getPlugin().isEnabled()) {
+                        continue;
+                    }
+                    Bukkit.getScheduler().runTaskWithMatrix(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                registration.callEvent(event);
+                            } catch (AuthorNagException ex) {
+                                Plugin plugin = registration.getPlugin();
 
-            try {
-                registration.callEvent(event);
-            } catch (AuthorNagException ex) {
-                Plugin plugin = registration.getPlugin();
+                                if (plugin.isNaggable()) {
+                                    plugin.setNaggable(false);
 
-                if (plugin.isNaggable()) {
-                    plugin.setNaggable(false);
-
-                    server.getLogger().log(Level.SEVERE, String.format(
-                            "Nag author(s): '%s' of '%s' about the following: %s",
-                            plugin.getDescription().getAuthors(),
-                            plugin.getDescription().getFullName(),
-                            ex.getMessage()
-                            ));
+                                    server.getLogger().log(Level.SEVERE, String.format(
+                                            "Nag author(s): '%s' of '%s' about the following: %s",
+                                            plugin.getDescription().getAuthors(),
+                                            plugin.getDescription().getFullName(),
+                                            ex.getMessage()
+                                    ));
+                                }
+                            } catch (Throwable ex) {
+                                server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName(), ex);
+                            }
+                        }
+                    });
                 }
-            } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName(), ex);
             }
-        }
+        }).start();
     }
 
     @Override

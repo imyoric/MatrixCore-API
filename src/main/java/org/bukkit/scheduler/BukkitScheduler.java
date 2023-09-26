@@ -219,6 +219,21 @@ public interface BukkitScheduler {
     @NotNull
     public BukkitTask runTask(@NotNull Plugin plugin, @NotNull Runnable task) throws IllegalArgumentException;
 
+    @NotNull
+    BukkitTask runTaskWithMatrix(@NotNull Runnable task) throws IllegalArgumentException; //MatrixCore Only
+
+    @NotNull
+    BukkitTask runTaskWithMatrix(@NotNull Runnable task, boolean ifComleteCheck) throws IllegalArgumentException;
+
+    @NotNull
+    Object runAsyncTaskWithMatrix(@NotNull Runnable task, boolean ifComleteCheck) throws IllegalArgumentException;
+
+    @NotNull
+    Object runAsyncTaskWithMatrix(@NotNull Runnable task) throws IllegalArgumentException; //MatrixCore Only
+
+    @NotNull
+    Object runAsyncTaskWithMatrix(@NotNull Runnable task, boolean ifComleteCheck, long msecPriority) throws IllegalArgumentException;
+
     /**
      * Returns a task that will run on the next server tick.
      *

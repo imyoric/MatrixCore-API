@@ -38,10 +38,10 @@ public class VersionCommand extends BukkitCommand {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String currentAlias, @NotNull String[] args) {
         if (!testPermission(sender)) return true;
-
+        Bukkit.getBukkitVersion();
         if (args.length == 0) {
-            sender.sendMessage("This server is running " + Bukkit.getName() + " version " + Bukkit.getVersion() + " (Implementing API version " + Bukkit.getBukkitVersion() + ")");
-            sendVersion(sender);
+            sender.sendMessage("Этот сервер основан на: " + Bukkit.getName() + ", версия: " + Bukkit.getVersion() + " (API: " + Bukkit.getBukkitVersion() + ")");
+//            sendVersion(sender);
         } else {
             StringBuilder name = new StringBuilder();
 
@@ -70,8 +70,8 @@ public class VersionCommand extends BukkitCommand {
             }
 
             if (!found) {
-                sender.sendMessage("This server is not running any plugin by that name.");
-                sender.sendMessage("Use /plugins to get a list of plugins.");
+                sender.sendMessage("На этом сервере нет плагинов с таким именем.");
+                sender.sendMessage("Используй /plugins для получения списка плагинов.");
             }
         }
         return true;
@@ -168,7 +168,7 @@ public class VersionCommand extends BukkitCommand {
                 return;
             }
             versionWaiters.add(sender);
-            sender.sendMessage("Checking version, please wait...");
+            sender.sendMessage("Проверка версии, пожалуйста подождите...");
             if (!versionTaskStarted) {
                 versionTaskStarted = true;
                 new Thread(new Runnable() {
@@ -186,7 +186,7 @@ public class VersionCommand extends BukkitCommand {
 
     private void obtainVersion() {
         String version = Bukkit.getVersion();
-        if (version == null) version = "Custom";
+        if (version == null) version = "Кастом";
         String[] parts = version.substring(0, version.indexOf(' ')).split("-");
         if (parts.length == 4) {
             int cbVersions = getDistance("craftbukkit", parts[3]);

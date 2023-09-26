@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public class PluginsCommand extends BukkitCommand {
     public boolean execute(@NotNull CommandSender sender, @NotNull String currentAlias, @NotNull String[] args) {
         if (!testPermission(sender)) return true;
 
-        sender.sendMessage("Plugins " + getPluginList());
+        sender.sendMessage("Список плагинов: "+getPluginList());
         return true;
     }
 
@@ -45,7 +46,6 @@ public class PluginsCommand extends BukkitCommand {
 
             pluginList.append(plugin.isEnabled() ? ChatColor.GREEN : ChatColor.RED);
             pluginList.append(plugin.getDescription().getName());
-
             if (plugin.getDescription().getProvides().size() > 0) {
                 pluginList.append(" (").append(String.join(", ", plugin.getDescription().getProvides())).append(")");
             }

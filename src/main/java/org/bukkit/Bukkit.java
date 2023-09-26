@@ -1304,7 +1304,6 @@ public final class Bukkit {
      *
      * @return a console command sender
      */
-    @NotNull
     public static ConsoleCommandSender getConsoleSender() {
         return server.getConsoleSender();
     }
@@ -1314,7 +1313,6 @@ public final class Bukkit {
      *
      * @return folder that contains all worlds
      */
-    @NotNull
     public static File getWorldContainer() {
         return server.getWorldContainer();
     }
@@ -1334,7 +1332,6 @@ public final class Bukkit {
      *
      * @return messenger responsible for this server
      */
-    @NotNull
     public static Messenger getMessenger() {
         return server.getMessenger();
     }
@@ -1344,7 +1341,6 @@ public final class Bukkit {
      *
      * @return a help map for this server
      */
-    @NotNull
     public static HelpMap getHelpMap() {
         return server.getHelpMap();
     }
@@ -2012,5 +2008,9 @@ public final class Bukkit {
     @NotNull
     public static Server.Spigot spigot() {
         return server.spigot();
+    }
+
+    public static String getAPI() {
+        return server.getAPI();
     }
 }

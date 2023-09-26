@@ -95,6 +95,8 @@ public interface Server extends PluginMessageRecipient {
     @NotNull
     public String getVersion();
 
+    String getAPI();
+
     /**
      * Gets the Bukkit version that this server is running.
      *
