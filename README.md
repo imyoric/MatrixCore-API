@@ -1,13 +1,19 @@
-Bukkit
+CraftBukkit
 ======
-A plugin API for [Minecraft](https://minecraft.net/) servers, currently maintained by [SpigotMC](https://www.spigotmc.org/).
+An implementation of the [Bukkit](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit) plugin API for [Minecraft](https://minecraft.net/) servers, currently maintained by [SpigotMC](https://www.spigotmc.org/).
 
 #### Index
+
 * [Bug Reporting](#bug-reporting)
 * [Compilation](#compilation)
 * [Contributing](#contributing)
-* [Bukkit's Goals](#bukkits-goals)
 * [Code Requirements](#code-requirements)
+    * [Applying Patches](#applying-patches)
+    * [Making Changes to Minecraft](#making-changes-to-minecraft)
+    * [Minimal Diff Policy](#minimal-diff-policy)
+    * [CraftBukkit Comments](#craftbukkit-comments)
+* [Creating Pull Requests](#creating-pull-requests)
+* [Useful Resources](#useful-resources)
 
 Bug Reporting
 -------------
@@ -17,18 +23,17 @@ The development team is very open to both bug and feature requests / suggestions
 Compilation
 -----------
 <a name="compilation"></a>
-Bukkit is a Java program which uses [Maven 3](https://maven.apache.org/) for compilation. To compile fresh from Git, simply perform the following steps:
+CraftBukkit is a Java program which uses [Maven 3](https://maven.apache.org/) for compilation. To compile fresh from Git, simply perform the following steps:
 
-* Install Maven and Git using your preferred installation methods.
-* `git clone https://hub.spigotmc.org/stash/scm/spigot/bukkit.git`.
-* `mvn -P development clean install`.
- 
-Some IDEs such as [NetBeans](https://netbeans.org/) can perform these steps for you. Any Maven capable Java IDE can be used to develop with Bukkit, however the current team's personal preference is to use NetBeans.
+* Install Git using your preferred installation methods.
+* Download and run [BuildTools](https://www.spigotmc.org/wiki/buildtools/)
+
+Some IDEs such as [NetBeans](https://netbeans.org/) can perform these steps for you. Any Maven capable Java IDE can be used to develop with CraftBukkit, however the current team's personal preference is to use NetBeans.
 
 Contributing
 ------------
 <a name="contributing"></a>
-Contributions of all sorts are welcome. To manage community contributions, we use the pull request functionality of Stash. In to gain access to Stash and create a pull request, you will first need to perform the following steps:
+Contributions of all sorts are welcome. To manage community contributions, we use the pull request functionality of Stash. In order to gain access to Stash and create a pull request, you will first need to perform the following steps:
 
 * Create an account on [JIRA](https://hub.spigotmc.org/jira/).
 * Fill in the [SpigotMC CLA](https://www.spigotmc.org/go/cla) and wait up to 24 hours for your Stash account to be activated. Please ensure that your username and email addresses match.
@@ -38,32 +43,7 @@ Once you have performed these steps you can create a fork, push your code change
 
 If you submit a PR involving both Bukkit and CraftBukkit, each PR should link the other.
 
-Although the minimum requirement for compilation & usage is Java 8, we prefer all contributions to be written in Java 7 style code unless there is a compelling reason otherwise.
-
-Bukkit's Goals
---------------
-<a name="bukkits-goals"></a>
-As a rough guideline, ask yourself the following questions to determine if the proposed change fits the Bukkit project's goals. Please remember that this is only a rough guideline
-and it may or may not reflect the definitive answer to this question.
-Discussions about proposed changes are held in the [Spigot Discord](https://www.spigotmc.org/go/discord).
-
-* Does it expose an implementation detail of the server software, or the protocol or file formats?
-
-    1. If your change revolves around an implementation detail then it is not proper API design. Examples of bad API design would be along the lines of
-    a packet API or an NBT storage API.
-* Does it result in unexpected behaviour as defined by the Vanilla specification?
-    1. One of the goals of the Bukkit project is to be an extended Minecraft Server. Meaning if you choose to run the Bukkit server without any plugin, it should function
-    exactly as the Minecraft Server would with some rare exceptions. If your change alters the behaviour of the server in such a way that you would not have the same experience as you
-    would in Vanilla, your change does not fit with the Bukkit project's goals.
-* Does it expose an issue or vulnerability when operating within the Vanilla environment?
-    1. One of the goals of the Bukkit project is to be able to operate within the limitations of the Vanilla environment. If your change results in, or exposes, the ability to, for example,
-    crash the client invalid data is set, it does not fit the Bukkit project's needs.
-
-If you answered yes to any of these questions, chances are high your change does not fit within the Bukkit project's goals and will likely not be accepted.
-Regardless, there are a few other important questions that need to be asked before you start working on a change:
-* Is this change reasonably supportable and maintainable?
-    1. *Are there tests for this change? Does this change rely on magic numbers?*
-* Is this change reasonably future proof?
+The minimum requirement for style, compilation & usage is Java 16 unless there is a compelling reason.
 
 Code Requirements
 -----------------
@@ -81,12 +61,8 @@ Code Requirements
   * If magic values are absolutely necessary for your change, what those values represent should be documented in the code as well as an explanation in the Pull Request description on why those values are necessary.
 * No unnecessary code changes. Look through all your changes before you submit it.
 * Do not attempt to fix multiple problems with a single patch or pull request.
+* Do not submit your personal changes to configuration files.
 * Avoid moving or renaming classes.
-* All non-private methods and constructors must have specified nullability through [annotations](https://github.com/JetBrains/java-annotations)
-* All classes/methods/fields related to a [Minecraft Experimental Feature](https://minecraft.fandom.com/wiki/Experimental_Gameplay) must be marked with [`@MinecraftExperimental`](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/MinecraftExperimental.html)
-* If necessary, you may consider the use of one of the following [ApiStatus Annotations](https://javadoc.io/doc/org.jetbrains/annotations-java5/23.0.0/org/jetbrains/annotations/ApiStatus.html):
-  * [`@ApiStatus.Experimental`](https://javadoc.io/doc/org.jetbrains/annotations-java5/23.0.0/org/jetbrains/annotations/ApiStatus.Experimental.html) for API that is subject to change
-  * [`@ApiStatus.Internal`](https://javadoc.io/doc/org.jetbrains/annotations-java5/23.0.0/org/jetbrains/annotations/ApiStatus.Internal.html) for API that is intended only for internal use in the Bukkit project and will not adhere to Bukkit's API contract
 
 Bukkit/CraftBukkit employs [JUnit 4](https://www.vogella.com/tutorials/JUnit4/article.html) for testing. Pull Requests(PR) should attempt to integrate within that framework as appropriate.
 Bukkit is a large project and what seems simple to a PR author at the time of writing may easily be overlooked by other authors and updates. Including unit tests with your PR
@@ -95,6 +71,238 @@ will help to ensure the PR can be easily maintained over time and encourage the 
 * There needs to be a new line at the end of every file.
 * Imports should be organised in a logical manner.
     * Do not group packages
+    * All new imports should be within existing CraftBukkit comments if any are present. If not, make them.
     * __Absolutely no wildcard imports outside of tests.__
+    * If you only use an import once, don't import it. Use the fully qualified name.
 
-Any questions about these requirements can be asked in [#help-development](https://www.spigotmc.org/go/discord) in Discord.
+Any questions about these requirements can be asked in #help-development in Discord.
+
+Applying Patches
+----------------
+<a name="applying-patches"></a>
+Any time new patches are created and/or updated in CraftBukkit, you need to apply them to your development environment.
+
+1. Pull changes from CraftBukkit repo.
+2. Run the `applyPatches.sh` script in the CraftBukkit directory.
+    - This script requires a decompile directory from BuildTools. (e.g. <BuildTools Directory>/work/decompile-XXXXXX)
+3. Your development environment is now up to date with the latest CraftBukkit patches!
+
+Making Changes to Minecraft
+---------------------------
+<a name="making-changes-to-minecraft"></a>
+Importing new NMS classes to CraftBukkit is actually very simple.
+
+1. Find the `work/decompile-XXXXXX` folder in your BuildTools folder.
+2. Find the class you want to add in the `net/minecraft/server` folder and copy it.
+3. Copy the selected file to the `src/main/java/net/minecraft/server` folder in CraftBukkit.
+4. Implement changes.
+5. Run `makePatches.sh` to create a new patch for the new class.
+    * _Be sure that Git recognizes the new file. This might require manually adding the file._
+6. Commit new patch.
+
+Done! You have added a new patch for CraftBukkit!
+
+**Making Changes to NMS Classes**
+
+Bukkit/CB employs a Minimal Diff policy to help guide when changes should be changed to Minecraft and what those changes should be.
+This is to ensure that any changes have the smallest impact possible on the update process whenever a new Minecraft version is released.
+As well as the Minimal Diff Policy, *every* change made to a Minecraft class must be marked with the appropriate CraftBukkit comment.
+At no point should you rename an existing/obfuscated field or method. All references to existing/obfusacted fields/methods should be marked with the `// PAIL rename` comment.
+Mapping of new fields/methods are done when there are enough changes to warrant the work. (Any questions can be asked in our [Discord](https://www.spigotmc.org/go/discord))
+
+__*Key Points*__:
+* All additions to patches must be accompanied by an appropriate comment.
+* To avoid large patches, avoid adding methods where possible. We prefer making fields public over adding methods in patches.
+  * If you *have* to add a method to a patch, please explain why in the Pull Request description.
+* __Never__ rename an existing field or method. If you want something renamed, include a ```PAIL rename``` comment
+* Converting a method/class from one access level to another (i.e. private to public) is fine as long as that method is not overridden in subclasses.
+  * If a method is overridden in its' subclasses, create a new method that calls that method instead (along with appropriate CraftBukkit comments).
+* If you can use a field to accomplish something, use that over creating a new method.
+
+Minimal Diff Policy
+-------------------
+<a name="minimal-diff-policy"></a>
+
+The Minimal Diff Policy is key to any changes made within Minecraft classes. When people think of the phrase "minimal diffs", they often take it
+to the extreme - they go completely out of their way to abstract the changes they are trying to make away from editing Minecraft's classes as much as possible.
+However, this is not what is meant by "minimal diffs". Instead, when trying to understand this policy, it helps to keep in mind its goal: to reduce the impact of changes we make
+to Minecraft's internals have on our update process.
+
+To put it simply, the Minimal Diffs Policy simply means to make the smallest change in a Minecraft class possible without duplicating logic.
+
+Here are a few tips you should keep in mind, or common areas you should focus on:
+
+* Try to avoid duplicating logic or code when making changes.
+* Try to keep your changes easily discernible - don't nest or group several unrelated changes together.
+    * All changes must be surrounded by [CraftBukkit comments](#craftbukkit-comments).
+* If you only use an import once within a class, don't import it and use a fully qualified name instead.
+* Try to employ "short-circuiting" of logic if at all possible. This means you should force a conditional to be the value needed to side step the code block to achieve your desired effect.
+
+__For example, to short circuit this:__
+```java
+if (!this.world.isClientSide && !this.isDead && (d0*d0) + d1 + (d2*d2) > 0.0D) {
+    this.die();
+    this.h();
+}
+```
+__You would do this:__
+```java
+if (false && !this.world.isClientSide && !this.isDead && (d0*d0) + d1 + (d2*d2) > 0.0D) {
+    this.die();
+    this.h();
+}
+```
+* For checks related to API where an exception needs to be thrown in a specific case we recommend use the package `Preconditions`
+  * For checking arguments we recommend using `Preconditions#checkArgument` where a failing check should throw a `IllegalArgumentException`
+    * We recommend using this to ensure the behaviour of `@NotNull` in the Bukkit API
+  * For checking arguments we recommend using `Preconditions#checkState` where a failing check should throw a `IllegalStateException`
+
+__For example, you should use:__
+```java
+private Object messenger;
+
+public void sendMessage(Sender sender, String message) {
+    Preconditions.checkArgument(sender != null, "sender cannot be null");
+    Preconditions.checkState(this.messenger != null, "The messenger instance cannot be used")
+}
+```
+__Instead of:__
+```java
+private Object messenger;
+
+public void sendMessage(Sender sender, String message) {
+    if (sender == null) {
+        throw new IllegalArgumentException("Sender cannot be null");
+    }
+
+    if (this.messenger == null) {
+        throw new IllegalStateException("The messenger instance cannot be used");
+    }
+}
+```
+
+* When the change you are trying to make involves removing code, or delegating it somewhere else, instead of removing it, you should comment it out.
+
+__For example:__
+```java
+// CraftBukkit start - special case dropping so we can get info from the tile entity
+public void dropNaturally(World world, int i, int j, int k, int l, float f, int i1) {
+    if (world.random.nextFloat() < f) {
+        ItemStack itemstack = new ItemStack(Item.SKULL, 1, this.getDropData(world, i, j, k));
+        TileEntitySkull tileentityskull = (TileEntitySkull) world.getTileEntity(i, j, k);
+
+        if (tileentityskull.getSkullType() == 3 && tileentityskull.getExtraType() != null && tileentityskull.getExtraType().length() > 0) {
+            itemstack.setTag(new NBTTagCompound());
+            itemstack.getTag().setString("SkullOwner", tileentityskull.getExtraType());
+        }
+
+        this.b(world, i, j, k, itemstack);
+    }
+}
+// CraftBukkit end
+
+public void remove(World world, int i, int j, int k, int l, int i1) {
+    if (!world.isStatic) {
+        /* CraftBukkit start - drop item in code above, not here
+        if ((i1 & 8) == 0) {
+            ItemStack itemstack = new ItemStack(Item.SKULL, 1, this.getDropData(world, i, j, k));
+            TileEntitySkull tileentityskull = (TileEntitySkull) world.getTileEntity(i, j, k);
+
+            if (tileentityskull.getSkullType() == 3 && tileentityskull.getExtraType() != null && tileentityskull.getExtraType().length() > 0) {
+                itemstack.setTag(new NBTTagCompound());
+                itemstack.getTag().setString("SkullOwner", tileentityskull.getExtraType());
+            }
+
+            this.b(world, i, j, k, itemstack);
+        }
+        // CraftBukkit end */
+
+        super.remove(world, i, j, k, l, i1);
+    }
+}
+```
+
+#### CraftBukkit Comments
+<a name="craftbukkit-comments"></a>
+
+Changes to a Minecraft class should be clearly marked using CraftBukkit comments.
+
+* All CraftBukkit comments should be capitalised appropriately. (i.e. CraftBukkit, not CB/craftBukkit, etc.)
+* If the change only affects one line of code, use an end of line CraftBukkit comment
+
+__Examples:__
+
+If the change is obvious, then you need a simple end of line comment.
+```java
+if (true || minecraftserver.getAllowNether()) { // CraftBukkit
+```
+
+Every reference to an obfuscated field/method in NMS should be marked with:
+```java
+// PAIL rename newName
+```
+All PAIL rename comments must include a new name.
+
+If, however, the change is something important to note or difficult to discern, you should include a reason at the end of the comment
+```java
+public int fireTicks; // PAIL private -> public
+```
+Changing access levels must include a PAIL comment indicating the previous access level and the new access level.
+
+If adding the CraftBukkit comment negatively affects the readability of the code, then you should place the comment on a new line *above* the change you made.
+```java
+// CraftBukkit
+if (!isEffect && !world.isStatic && world.difficulty >= 2 && world.areChunksLoaded(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2), 10)) {
+```
+
+* If the change affects more than one line, you should use a multi-line CraftBukkit comment.
+
+__Example:__
+
+The majority of the time, multi-line changes should be accompanied by a reason since they're usually much more complicated than a single line change.
+*If the change is something important to note or difficult to discern, you should include a reason at the end of line CraftBukkit comment.*
+```java
+// CraftBukkit start - special case dropping so we can get info from the tile entity
+public void dropNaturally(World world, int i, int j, int k, int l, float f, int i1) {
+    if (world.random.nextFloat() < f) {
+        ItemStack itemstack = new ItemStack(Item.SKULL, 1, this.getDropData(world, i, j, k));
+        TileEntitySkull tileentityskull = (TileEntitySkull) world.getTileEntity(i, j, k);
+
+        if (tileentityskull.getSkullType() == 3 && tileentityskull.getExtraType() != null && tileentityskull.getExtraType().length() > 0) {
+            itemstack.setTag(new NBTTagCompound());
+            itemstack.getTag().setString("SkullOwner", tileentityskull.getExtraType());
+        }
+
+        this.b(world, i, j, k, itemstack);
+    }
+}
+// CraftBukkit end
+```
+Otherwise, if the change is obvious, such as firing an event, then you can simply use a multi-line comment.
+```java
+    // CraftBukkit start
+    BlockIgniteEvent event = new BlockIgniteEvent(this.cworld.getBlockAt(i, j, k), BlockIgniteEvent.IgniteCause.LIGHTNING, null);
+    world.getServer().getPluginManager().callEvent(event);
+
+    if (!event.isCancelled()) {
+        world.setTypeIdUpdate(i, j, k, Block.FIRE);
+    }
+    // CraftBukkit end
+```
+* All CraftBukkit comments should be on the same indentation level the code block it is in.
+
+__Imports in Minecraft Classes__
+* Do not remove unused imports if they are not marked by CraftBukkit comments.
+
+Creating Pull Requests
+----------------------
+<a name="creating-pull-requests"></a>
+To learn what Spigot expects of a Pull Request please view the [Contributing guidelines](CONTRIBUTING.md)
+
+Useful Resources
+----------------
+<a name="useful-resources"></a>
+
+* [An example pull request demonstrating the things we look out for](https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/pull-requests/365/overview)
+* [JIRA, our bug tracker](https://hub.spigotmc.org/jira/)
+* [Join us on Discord - #help-development](https://www.spigotmc.org/go/discord)

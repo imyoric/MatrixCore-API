@@ -6,13 +6,14 @@
 
 # netbeans
 /nbproject
-/nb-configuration.xml
+nb*.xml
 
 # we use maven!
 /build.xml
 
 # maven
 /target
+dependency-reduced-pom.xml
 
 # vim
 .*.sw[a-p]
@@ -23,6 +24,9 @@
 /dist
 /manifest.mf
 
+/world
+/logs
+
 # Mac filesystem dust
 .DS_Store
 
@@ -31,3 +35,6 @@
 *.ipr
 *.iws
 .idea/
+
+/src/main/resources/achievement
+/src/main/resources/lang

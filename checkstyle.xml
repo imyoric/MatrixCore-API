@@ -20,11 +20,13 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
-    <!-- See https://checkstyle.sourceforge.io/config_javadoc.html#JavadocPackage-->
-    <module name="JavadocPackage"/>
-
+    <!-- See http://checkstyle.sourceforge.net/config_filters.html -->
     <module name="SuppressionSingleFilter">
-        <property name="message" value="'(implNote|implSpec|apiNote)'\."/>
+        <property name="checks" value="UnusedImports"/>
+        <property name="files" value=".*[/\\]net[/\\]minecraft[/\\]server[/\\].*"/>
+    </module>
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="LeftCurly|ParenPad"/>
     </module>
 
     <module name="TreeWalker">
@@ -33,16 +35,26 @@
         <module name="InvalidJavadocPosition"/>
         <module name="JavadocBlockTagLocation"/>
         <module name="JavadocContentLocationCheck"/>
-        <module name="JavadocMethod"/>
+        <!--<module name="JavadocMethod"/>-->
         <module name="JavadocType"/>
         <module name="MissingJavadocPackage"/>
-        <module name="NonEmptyAtclauseDescription"/>
+        <!--<module name="NonEmptyAtclauseDescription"/>-->
 
         <!-- See http://checkstyle.sourceforge.net/config_filters.html -->
         <module name="SuppressionCommentFilter"/>
         <module name="SuppressionCommentFilter">
+            <property name="offCommentFormat" value="CraftBukkit start"/>
+            <property name="onCommentFormat" value="CraftBukkit end"/>
+        </module>
+        <module name="SuppressWithNearbyCommentFilter">
+            <property name="commentFormat" value="CraftBukkit"/>
+        </module>
+        <module name="SuppressionCommentFilter">
             <property name="offCommentFormat" value="Spigot start"/>
             <property name="onCommentFormat" value="Spigot end"/>
+        </module>
+        <module name="SuppressWithNearbyCommentFilter">
+            <property name="commentFormat" value="Spigot"/>
         </module>
 
         <!-- See http://checkstyle.sourceforge.net/config_imports.html -->
@@ -56,7 +68,7 @@
             <property name="sortStaticImportsAlphabetically" value="true"/>
         </module>
         <module name="RedundantImport"/>
-        <module name="UnusedImports"/>
+        <!--<module name="UnusedImports"/>-->
 
         <!-- See https://checkstyle.org/config_whitespace.html -->
         <module name="GenericWhitespace"/>
@@ -82,12 +94,13 @@
         <module name="ModifierOrder"/>
 
         <!-- See https://checkstyle.org/config_blocks.html -->
-        <module name="AvoidNestedBlocks"/>
+        <!--<module name="AvoidNestedBlocks"/>-->
         <module name="LeftCurly"/>
         <module name="RightCurly"/>
 
         <!-- See http://checkstyle.sourceforge.net/config_design.html -->
-        <module name="FinalClass"/>
+        <!--<module name="FinalClass"/>-->
+        <!--<module name="InterfaceIsType"/>-->
 
         <!-- See http://checkstyle.sourceforge.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
